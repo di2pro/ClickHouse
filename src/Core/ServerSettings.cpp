@@ -548,6 +548,42 @@ namespace DB
     <max_table_num_to_warn>400</max_table_num_to_warn>
     ```
     )", 0) \
+    DECLARE(UInt64, max_pending_mutations_to_warn, 5000lu, R"(
+    If the number of pending mutations exceeds the specified value, clickhouse server will add warning messages to `system.warnings` table.
+
+    **Example**
+
+    ``` xml
+    <max_pending_mutations_to_warn>400</max_pending_mutations_to_warn>
+    ```
+    )", 0) \
+    DECLARE(UInt64, max_stuck_mutations_to_warn, 5000lu, R"(
+    If the number of stuck mutations exceeds the specified value, clickhouse server will add warning messages to `system.warnings` table.
+
+    **Example**
+
+    ``` xml
+    <max_stuck_mutations_to_warn>400</max_stuck_mutations_to_warn>
+    ```
+    )", 0) \
+    DECLARE(Double, max_keeper_latency_factor_to_warn, 5.0, R"(
+    If the average Keeper connection latency increases by a factor of the specified value, clickhouse server will add warning messages to `system.warnings` table.
+
+    **Example**
+
+    ``` xml
+    <max_keeper_latency_factor_to_warn>5.0</max_keeper_latency_factor_to_warn>
+    ```
+    )", 0.0) \
+    DECLARE(Double, max_keeper_packest_loss_ratio_to_warn, 0.1, R"(
+    If the Keeper ratio of packets lost is greater than the specified value, clickhouse server will add warning messages to `system.warnings` table.
+
+    **Example**
+
+    ``` xml
+    <max_keeper_packest_loss_ratio_to_warn>0.1</max_keeper_packest_loss_ratio_to_warn>
+    ```
+    )", 0.0) \
     DECLARE(UInt64, max_view_num_to_warn, 10000lu, R"(
     If the number of attached views exceeds the specified value, clickhouse server will add warning messages to `system.warnings` table.
 
