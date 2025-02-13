@@ -517,13 +517,16 @@ CAPTURE_CLIENT_STACKTRACE = False
 
 
 def kill_process_group(pgid):
-    print(f"Killing process group {pgid}")
-    print(f"Processes in process group {pgid}:")
-    print(
+    # The sleep in between here causes broken test results.
+    # All the output must be related to the single test, that's why output is collected
+    # and printed only once in the end
+    output = []
+    output.append(f"Killing process group {pgid}")
+    output.append(f"Processes in process group {pgid}:")
+    output.append(
         subprocess.check_output(
             f"pgrep --pgroup {pgid} -a", shell=True, stderr=subprocess.STDOUT
         ).decode("utf-8"),
-        end="",
     )
     try:
         if CAPTURE_CLIENT_STACKTRACE:
@@ -552,9 +555,11 @@ def kill_process_group(pgid):
         os.killpg(pgid, signal.SIGKILL)
     except OSError as e:
         if e.errno == ESRCH:
-            print(f"Got ESRCH while killing {pgid}. Ignoring.")
+            output.append(f"Got ESRCH while killing {pgid}. Ignoring.")
         else:
+            print("\n".join(output))
             raise
+    print("\n".join(output))
     print(f"Process group {pgid} should be killed")
 
 
@@ -2463,7 +2468,7 @@ def run_tests_array(
         multiprocessing.sharedctypes.Synchronized,
         multiprocessing.synchronize.Event,
         multiprocessing.managers.ListProxy,
-    ]
+    ],
 ):
     (
         all_tests,
